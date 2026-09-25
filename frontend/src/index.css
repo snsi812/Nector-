@@ -1,0 +1,60 @@
+:root {
+  --page-bg: #E4E2D8;
+  --panel: #FFFFFF;
+  --ink: #14140F;
+  --ink-soft: #55564C;
+  --rule: #14140F;
+  --rule-soft: #C9C7B9;
+
+  --protein: #A8321F;
+  --carbs: #B98423;
+  --fats: #276E63;
+  --calories: #14140F;
+
+  --good: #2F7D3E;
+  --over: #A8321F;
+
+  --font-display: 'Oswald', 'Arial Narrow', sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--page-bg);
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(20,20,15,0.06) 1px, transparent 0);
+  background-size: 22px 22px;
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+input, select, textarea {
+  font-family: var(--font-body);
+}
+
+:focus-visible {
+  outline: 3px solid var(--carbs);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--calories);
+  color: var(--panel);
+}
