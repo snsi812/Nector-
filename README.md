@@ -28,7 +28,7 @@ nector/
 cd backend
 npm install
 cp .env .env        # already present; edit DATABASE_URL for your Postgres instance
-npm run dev          # http://localhost:4000
+npm run dev          
 ```
 
 `DATABASE_URL` in `backend/.env` is set up for PostgreSQL, e.g.:
@@ -74,7 +74,7 @@ dashboard — end-to-end against SQLite during development.
 cd frontend
 npm install
 cp .env.example .env   # points at the local API by default
-npm run dev             # http://localhost:5173
+npm run dev             
 ```
 
 ## Notes
