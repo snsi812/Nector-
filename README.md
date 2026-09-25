@@ -15,7 +15,6 @@ React · JWT + Bcrypt authentication.
 > identical — only the data-access layer changed.
 
 ## Project structure
-
 ```
 nector/
 ├── backend/     Express API — auth, goals, meals, dashboard
