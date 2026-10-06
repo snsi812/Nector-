@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { z } from "zod";
-import { User } from "../models";
+import { prisma } from "../lib/prisma";
 import { computeTargets } from "../lib/macros";
 import { requireAuth, AuthedRequest } from "../middleware/auth";
 
@@ -24,26 +24,17 @@ const updateGoalSchema = z.object({
 // PUT /api/goals — set goal type; recomputes macro targets unless overridden.
 router.put("/", async (req: AuthedRequest, res) => {
   const parsed = updateGoalSchema.safeParse(req.body);
-  if (!parsed.success) {
-    return res.status(400).json({ error: parsed.error.flatten() });
-  }
+  if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
   const { goal, weightKg, heightCm, overrides } = parsed.data;
 
-  const user = await User.findByPk(req.userId);
-  if (!user) return res.status(404).json({ error: "User not found" });
-
-  const computed = computeTargets(goal, weightKg);
-  const targets = { ...computed, ...overrides };
-
-  user.set({
-    goal,
-    weightKg: weightKg ?? user.weightKg,
-    heightCm: heightCm ?? user.heightCm,
-    ...targets,
+  const targets = { ...computeTargets(goal, weightKg), ...overrides };
+  const user = await prisma.user.update({
+    where: { id: req.userId },
+    data: { goal, weightKg, heightCm, ...targets },
   });
-  await user.save();
 
-  return res.json({ user: user.toSafeJSON() });
+  const { passwordHash, ...safeUser } = user;
+  return res.json({ user: safeUser });
 });
 
 export default router;

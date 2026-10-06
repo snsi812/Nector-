@@ -1,8 +1,6 @@
 import cors from "cors";
 import "dotenv/config";
 import express from "express";
-import { sequelize } from "./config/database";
-import "./models"; // registers models + associations before sync
 import authRoutes from "./routes/auth";
 import dashboardRoutes from "./routes/dashboard";
 import goalRoutes from "./routes/goals";
@@ -26,18 +24,6 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
 });
 
 const PORT = Number(process.env.PORT) || 4000;
-
-async function start() {
-  await sequelize.authenticate();
-  // In production, prefer versioned migrations (e.g. sequelize-cli) over
-  // sync(). sync() is used here so the schema self-creates for local/dev use.
-  await sequelize.sync();
-  app.listen(PORT, () => {
-    console.log(`Nector API listening on http://localhost:${PORT}`);
-  });
-}
-
-start().catch((err) => {
-  console.error("Failed to start Nector API:", err);
-  process.exit(1);
+app.listen(PORT, () => {
+  console.log(`Nector API listening on http://localhost:${PORT}`);
 });

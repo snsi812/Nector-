@@ -1,0 +1,62 @@
+// Nector — Prisma schema (PostgreSQL)
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Goal {
+  CUTTING
+  BULKING
+  RECOMPOSITION
+}
+
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACK
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  goal         Goal     @default(RECOMPOSITION)
+
+  // Daily macro targets, derived from goal + body stats, but editable by the user.
+  targetCalories Int @default(2200)
+  targetProtein  Int @default(150) // grams
+  targetCarbs    Int @default(220) // grams
+  targetFats     Int @default(70)  // grams
+
+  weightKg Float?
+  heightCm Float?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  meals Meal[]
+}
+
+model Meal {
+  id       String   @id @default(cuid())
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String
+  name     String
+  mealType MealType
+  date     DateTime @default(now())
+
+  calories Int
+  protein  Float
+  carbs    Float
+  fats     Float
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, date])
+}
